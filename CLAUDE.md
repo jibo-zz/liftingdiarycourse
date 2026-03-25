@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## IMPORTANT: Docs First
+
+Before generating any code, **always check the `/docs` directory first** for relevant documentation files. These docs contain project-specific patterns, conventions, and decisions that must be followed. Refer to the appropriate doc(s) before writing or modifying any code.
+
+- /docs/ui.md
+
 ## Commands
 
 ```bash
