@@ -1,4 +1,24 @@
 import { and, eq, gte, lt, sql } from 'drizzle-orm'
+
+export function getWorkoutById(userId: string, workoutId: number) {
+  return db
+    .select()
+    .from(workouts)
+    .where(and(eq(workouts.id, workoutId), eq(workouts.userId, userId)))
+    .then(rows => rows[0] ?? null)
+}
+
+export function updateWorkout(userId: string, workoutId: number, data: { name?: string; startedAt?: string }) {
+  return db
+    .update(workouts)
+    .set({
+      ...(data.name !== undefined ? { name: data.name } : {}),
+      ...(data.startedAt !== undefined ? { startedAt: new Date(data.startedAt) } : {}),
+    })
+    .where(and(eq(workouts.id, workoutId), eq(workouts.userId, userId)))
+    .returning()
+}
+
 import { db } from '../db'
 import { workouts, workoutExercises, sets } from '../db/schema'
 

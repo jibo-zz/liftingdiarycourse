@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gray-950 text-white">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white">
     <div class="max-w-5xl mx-auto px-6 py-10">
       <!-- Header -->
       <div class="mb-10">
         <h1 class="text-3xl font-bold tracking-tight">Workout Dashboard</h1>
-        <p class="text-gray-400 mt-1">Track your lifting progress</p>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Track your lifting progress</p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 items-start">
@@ -12,7 +12,7 @@
         <UCard class="w-fit">
           <p class="text-xs text-gray-500 uppercase tracking-wider mb-4">Select a date</p>
           <UCalendar v-model="selectedDate" color="primary" size="md" />
-          <p class="text-center text-sm font-medium text-gray-300 mt-4">{{ formattedDate }}</p>
+          <p class="text-center text-sm font-medium text-gray-600 dark:text-gray-300 mt-4">{{ formattedDate }}</p>
         </UCard>
 
         <!-- Workouts Section -->
@@ -33,8 +33,8 @@
           <UCard v-else-if="workoutsForDate.length === 0">
             <div class="flex flex-col items-center justify-center py-16 text-center">
               <UIcon name="i-lucide-dumbbell" class="w-12 h-12 text-gray-600 mb-4" />
-              <p class="text-gray-400 font-medium">No workouts logged</p>
-              <p class="text-gray-600 text-sm mt-1">Nothing recorded for this day yet.</p>
+              <p class="text-gray-500 dark:text-gray-400 font-medium">No workouts logged</p>
+              <p class="text-gray-400 dark:text-gray-600 text-sm mt-1">Nothing recorded for this day yet.</p>
               <UButton class="mt-6" icon="i-lucide-plus" label="Log Workout" color="primary" to="/dashboard/workout/new" />
             </div>
           </UCard>
@@ -49,7 +49,7 @@
                   </div>
                   <div>
                     <p class="font-semibold text-base">{{ workout.name }}</p>
-                    <p class="text-sm text-gray-400 mt-0.5">{{ formatDuration(workout.startedAt, workout.completedAt) }} · {{ workout.exerciseCount }} exercises</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ formatDuration(workout.startedAt, workout.completedAt) }} · {{ workout.exerciseCount }} exercises</p>
                   </div>
                 </div>
               </div>
@@ -58,16 +58,16 @@
 
               <div class="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <p class="text-xs text-gray-500 uppercase tracking-wider">Sets</p>
-                  <p class="text-lg font-bold mt-1">{{ workout.setCount }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-500 uppercase tracking-wider">Sets</p>
+                  <p class="text-lg font-bold mt-1 text-gray-900 dark:text-white">{{ workout.setCount }}</p>
                 </div>
                 <div>
-                  <p class="text-xs text-gray-500 uppercase tracking-wider">Reps</p>
-                  <p class="text-lg font-bold mt-1">{{ workout.totalReps }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-500 uppercase tracking-wider">Reps</p>
+                  <p class="text-lg font-bold mt-1 text-gray-900 dark:text-white">{{ workout.totalReps }}</p>
                 </div>
                 <div>
-                  <p class="text-xs text-gray-500 uppercase tracking-wider">Volume</p>
-                  <p class="text-lg font-bold mt-1">{{ formatVolume(workout.totalVolume) }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-500 uppercase tracking-wider">Volume</p>
+                  <p class="text-lg font-bold mt-1 text-gray-900 dark:text-white">{{ formatVolume(workout.totalVolume) }}</p>
                 </div>
               </div>
             </UCard>

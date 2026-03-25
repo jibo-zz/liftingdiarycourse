@@ -73,7 +73,10 @@ export default defineEventHandler(async (event) => {
 // app/pages/workouts.vue
 <script setup lang="ts">
 const { data: workouts } = await useAsyncData('workouts', () =>
-  $fetch('/api/workouts')
+  $fetch('/api/workouts'),
+  { server: false }
 )
 </script>
 ```
+
+> **Why `server: false`?** During SSR, Nuxt's internal `$fetch` calls do not forward the browser's session cookies. Clerk authenticates via cookies, so any API route that calls `event.context.auth()` will receive no `userId` and return a `401`. Always set `server: false` on `useAsyncData` calls so the fetch runs client-side where the Clerk session is available.

@@ -183,3 +183,4 @@ async function handleDelete(id: string) {
 | Zod validation required | Every API route must validate all inputs (body + params) with Zod |
 | Auth always server-side | User identity always from `event.context.auth()` — never from the client |
 | Scope by `userId` | Every mutation must be scoped to the authenticated user's ID |
+| `useAsyncData` must use `server: false` | Clerk auth cookies are not forwarded during SSR — always pass `{ server: false }` to `useAsyncData` or API calls will return 401 |
