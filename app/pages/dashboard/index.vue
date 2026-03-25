@@ -80,6 +80,10 @@
 
 <script setup lang="ts">
 import { format } from 'date-fns'
+
+definePageMeta({
+  middleware: ['auth'],
+})
 import { today, getLocalTimeZone } from '@internationalized/date'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

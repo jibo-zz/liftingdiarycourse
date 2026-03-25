@@ -73,6 +73,10 @@
 import { z } from 'zod'
 import { format } from 'date-fns'
 
+definePageMeta({
+  middleware: ['auth'],
+})
+
 const route = useRoute()
 const workoutId = route.params.workoutId as string
 
