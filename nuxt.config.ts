@@ -16,7 +16,8 @@ export default defineNuxtConfig({
   
   vite: {
     optimizeDeps: {
-      exclude: ['@clerk/vue']
+      exclude: ['@clerk/vue'],
+      include: ['date-fns', '@internationalized/date', 'zod'],
     }
   }
 })

@@ -35,7 +35,7 @@
               <UIcon name="i-lucide-dumbbell" class="w-12 h-12 text-gray-600 mb-4" />
               <p class="text-gray-400 font-medium">No workouts logged</p>
               <p class="text-gray-600 text-sm mt-1">Nothing recorded for this day yet.</p>
-              <UButton class="mt-6" icon="i-lucide-plus" label="Log Workout" color="primary" />
+              <UButton class="mt-6" icon="i-lucide-plus" label="Log Workout" color="primary" to="/dashboard/workout/new" />
             </div>
           </UCard>
 
@@ -98,7 +98,7 @@ const dateKey = computed(() => {
 const { data: workoutsData, status } = await useAsyncData(
   () => `workouts-${dateKey.value}`,
   () => $fetch('/api/workouts', { query: { date: dateKey.value } }),
-  { watch: [dateKey] }
+  { server: false },
 )
 
 const workoutsForDate = computed(() => workoutsData.value ?? [])

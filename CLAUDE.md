@@ -8,6 +8,8 @@ Before generating any code, **always check the `/docs` directory first** for rel
 
 - /docs/ui.md
 - /docs/data-fetching.md
+- /docs/auth.md
+- /docs/data-mutations.md
 
 ## Commands
 
