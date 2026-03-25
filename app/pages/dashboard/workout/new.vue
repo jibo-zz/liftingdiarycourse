@@ -73,6 +73,10 @@
 import { z } from 'zod'
 import { format } from 'date-fns'
 
+definePageMeta({
+  middleware: ['auth'],
+})
+
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
   date: z.iso.date('Invalid date'),
