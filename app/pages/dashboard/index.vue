@@ -41,7 +41,8 @@
 
           <!-- Workout Cards -->
           <div v-else class="space-y-4">
-            <UCard v-for="workout in workoutsForDate" :key="workout.id">
+            <NuxtLink v-for="workout in workoutsForDate" :key="workout.id" :to="`/dashboard/workout/${workout.id}`" class="block">
+            <UCard class="hover:ring-2 hover:ring-primary-500 transition cursor-pointer">
               <div class="flex items-start justify-between">
                 <div class="flex items-start gap-4">
                   <div class="bg-primary-500/10 rounded-xl p-3 mt-0.5">
@@ -71,6 +72,7 @@
                 </div>
               </div>
             </UCard>
+            </NuxtLink>
           </div>
         </div>
       </div>
