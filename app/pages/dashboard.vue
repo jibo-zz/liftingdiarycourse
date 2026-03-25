@@ -19,11 +19,18 @@
         <div>
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold">Workouts on {{ formattedDate }}</h2>
-            <UBadge :label="`${workouts.length} logged`" color="primary" variant="soft" />
+            <UBadge :label="`${workoutsForDate.length} logged`" color="primary" variant="soft" />
           </div>
 
+          <!-- Loading State -->
+          <UCard v-if="status === 'pending'">
+            <div class="flex items-center justify-center py-16">
+              <UIcon name="i-lucide-loader-circle" class="w-8 h-8 text-gray-500 animate-spin" />
+            </div>
+          </UCard>
+
           <!-- Empty State -->
-          <UCard v-if="workouts.length === 0">
+          <UCard v-else-if="workoutsForDate.length === 0">
             <div class="flex flex-col items-center justify-center py-16 text-center">
               <UIcon name="i-lucide-dumbbell" class="w-12 h-12 text-gray-600 mb-4" />
               <p class="text-gray-400 font-medium">No workouts logged</p>
@@ -34,7 +41,7 @@
 
           <!-- Workout Cards -->
           <div v-else class="space-y-4">
-            <UCard v-for="workout in workouts" :key="workout.id">
+            <UCard v-for="workout in workoutsForDate" :key="workout.id">
               <div class="flex items-start justify-between">
                 <div class="flex items-start gap-4">
                   <div class="bg-primary-500/10 rounded-xl p-3 mt-0.5">
@@ -42,10 +49,9 @@
                   </div>
                   <div>
                     <p class="font-semibold text-base">{{ workout.name }}</p>
-                    <p class="text-sm text-gray-400 mt-0.5">{{ workout.duration }} · {{ workout.exercises }} exercises</p>
+                    <p class="text-sm text-gray-400 mt-0.5">{{ formatDuration(workout.startedAt, workout.completedAt) }} · {{ workout.exerciseCount }} exercises</p>
                   </div>
                 </div>
-                <UBadge :label="workout.category" color="neutral" variant="soft" size="sm" />
               </div>
 
               <USeparator class="my-4" />
@@ -53,15 +59,15 @@
               <div class="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <p class="text-xs text-gray-500 uppercase tracking-wider">Sets</p>
-                  <p class="text-lg font-bold mt-1">{{ workout.sets }}</p>
+                  <p class="text-lg font-bold mt-1">{{ workout.setCount }}</p>
                 </div>
                 <div>
                   <p class="text-xs text-gray-500 uppercase tracking-wider">Reps</p>
-                  <p class="text-lg font-bold mt-1">{{ workout.reps }}</p>
+                  <p class="text-lg font-bold mt-1">{{ workout.totalReps }}</p>
                 </div>
                 <div>
                   <p class="text-xs text-gray-500 uppercase tracking-wider">Volume</p>
-                  <p class="text-lg font-bold mt-1">{{ workout.volume }}</p>
+                  <p class="text-lg font-bold mt-1">{{ formatVolume(workout.totalVolume) }}</p>
                 </div>
               </div>
             </UCard>
@@ -74,7 +80,7 @@
 
 <script setup lang="ts">
 import { format } from 'date-fns'
-import { today, getLocalTimeZone, CalendarDate } from '@internationalized/date'
+import { today, getLocalTimeZone } from '@internationalized/date'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const selectedDate = ref<any>(today(getLocalTimeZone()))
@@ -84,27 +90,26 @@ const formattedDate = computed(() => {
   return format(new Date(d.year, d.month - 1, d.day), "do MMM yyyy")
 })
 
-// Placeholder workouts — replace with real data fetching later
-const workouts = ref([
-  {
-    id: 1,
-    name: 'Bench Press',
-    category: 'Chest',
-    duration: '45 min',
-    exercises: 3,
-    sets: 12,
-    reps: 144,
-    volume: '8,640 kg',
-  },
-  {
-    id: 2,
-    name: 'Squat',
-    category: 'Legs',
-    duration: '50 min',
-    exercises: 4,
-    sets: 16,
-    reps: 160,
-    volume: '12,000 kg',
-  },
-])
+const dateKey = computed(() => {
+  const d = selectedDate.value
+  return `${d.year}-${String(d.month).padStart(2, '0')}-${String(d.day).padStart(2, '0')}`
+})
+
+const { data: workoutsData, status } = await useAsyncData(
+  () => `workouts-${dateKey.value}`,
+  () => $fetch('/api/workouts', { query: { date: dateKey.value } }),
+  { watch: [dateKey] }
+)
+
+const workoutsForDate = computed(() => workoutsData.value ?? [])
+
+function formatDuration(startedAt: string | Date, completedAt: string | Date | null): string {
+  if (!completedAt) return 'In progress'
+  const minutes = Math.round((new Date(completedAt).getTime() - new Date(startedAt).getTime()) / 60000)
+  return `${minutes} min`
+}
+
+function formatVolume(volume: number): string {
+  return `${Number(volume).toLocaleString()} kg`
+}
 </script>
