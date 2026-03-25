@@ -1,3 +1,9 @@
+<script setup lang="ts">
+definePageMeta({
+  middleware: ['guest']
+})
+</script>
+
 <template>
   <div class="min-h-screen flex flex-col items-center justify-center gap-6">
     <h1 class="text-4xl font-bold">Lifting Diary</h1>
