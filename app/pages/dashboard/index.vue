@@ -7,19 +7,25 @@
         <p class="text-gray-500 dark:text-gray-400 mt-1">Track your lifting progress</p>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 items-start">
-        <!-- Calendar -->
-        <UCard class="w-fit">
-          <p class="text-xs text-gray-500 uppercase tracking-wider mb-4">Select a date</p>
-          <UCalendar v-model="selectedDate" color="primary" size="md" />
-          <p class="text-center text-sm font-medium text-gray-600 dark:text-gray-300 mt-4">{{ formattedDate }}</p>
-        </UCard>
-
+      <div>
         <!-- Workouts Section -->
         <div>
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold">Workouts on {{ formattedDate }}</h2>
-            <UBadge :label="`${workoutsForDate.length} logged`" color="primary" variant="soft" />
+            <div class="flex items-center gap-3">
+              <h2 class="text-lg font-semibold">Workouts on {{ formattedDate }}</h2>
+              <UPopover :open="isOpen" @update:open="isOpen = $event">
+                <UButton icon="i-lucide-calendar" color="neutral" variant="ghost" size="sm" />
+                <template #content>
+                  <div class="p-2">
+                    <UCalendar v-model="selectedDate" color="primary" size="md" />
+                  </div>
+                </template>
+              </UPopover>
+            </div>
+            <div class="flex items-center gap-3">
+              <UBadge :label="`${workoutsForDate.length} logged`" color="primary" variant="soft" />
+              <UButton icon="i-lucide-plus" label="Log New Workout" color="primary" to="/dashboard/workout/new" />
+            </div>
           </div>
 
           <!-- Loading State -->
@@ -35,7 +41,6 @@
               <UIcon name="i-lucide-dumbbell" class="w-12 h-12 text-gray-600 mb-4" />
               <p class="text-gray-500 dark:text-gray-400 font-medium">No workouts logged</p>
               <p class="text-gray-400 dark:text-gray-600 text-sm mt-1">Nothing recorded for this day yet.</p>
-              <UButton class="mt-6" icon="i-lucide-plus" label="Log Workout" color="primary" to="/dashboard/workout/new" />
             </div>
           </UCard>
 
@@ -90,6 +95,11 @@ import { today, getLocalTimeZone } from '@internationalized/date'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const selectedDate = ref<any>(today(getLocalTimeZone()))
+const isOpen = ref(false)
+
+watch(selectedDate, () => {
+  isOpen.value = false
+})
 
 const formattedDate = computed(() => {
   const d = selectedDate.value
