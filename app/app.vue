@@ -4,9 +4,10 @@
 
 <template>
   <UApp>
-    <header class="flex items-center justify-between px-6 py-4 border-b border-gray-800 bg-gray-950">
-      <span class="text-lg font-bold tracking-tight text-white">Lifting Diary</span>
-      <div>
+    <header class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+      <span class="text-lg font-bold tracking-tight text-gray-900 dark:text-white">Lifting Diary</span>
+      <div class="flex items-center gap-3">
+        <UColorModeSelect size="sm" />
         <Show when="signed-out">
           <div class="flex gap-2">
             <SignInButton mode="modal">
