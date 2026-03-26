@@ -7,7 +7,7 @@
           icon="i-lucide-arrow-left"
           variant="ghost"
           color="neutral"
-          to="/dashboard"
+          :to="backLink"
           class="mb-4"
         />
         <h1 class="text-3xl font-bold tracking-tight">Log Workout</h1>
@@ -53,7 +53,7 @@
               label="Cancel"
               variant="ghost"
               color="neutral"
-              to="/dashboard"
+              :to="backLink"
             />
             <UButton
               type="submit"
@@ -83,12 +83,16 @@ const schema = z.object({
   startTime: z.string().min(1, 'Start time is required'),
 })
 
+const route = useRoute()
+const queryDate = route.query.date as string | undefined
+const backLink = queryDate ? `/dashboard?date=${queryDate}` : '/dashboard'
+
 const today = format(new Date(), 'yyyy-MM-dd')
 const nowTime = format(new Date(), 'HH:mm')
 
 const form = reactive({
   name: '',
-  date: today,
+  date: queryDate ?? today,
   startTime: nowTime,
 })
 
@@ -104,7 +108,7 @@ async function handleSubmit() {
       method: 'POST',
       body: { name: form.name, startedAt },
     })
-    await navigateTo('/dashboard')
+    await navigateTo(backLink)
   }
   catch (e: unknown) {
     error.value = (e as { data?: { message?: string } })?.data?.message ?? 'Something went wrong. Please try again.'

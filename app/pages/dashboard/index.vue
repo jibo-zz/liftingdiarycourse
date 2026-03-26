@@ -24,7 +24,7 @@
             </div>
             <div class="flex items-center gap-3">
               <UBadge :label="`${workoutsForDate.length} logged`" color="primary" variant="soft" />
-              <UButton icon="i-lucide-plus" label="Log New Workout" color="primary" to="/dashboard/workout/new" />
+              <UButton icon="i-lucide-plus" label="Log New Workout" color="primary" :to="`/dashboard/workout/new?date=${dateKey}`" />
             </div>
           </div>
 
@@ -46,7 +46,7 @@
 
           <!-- Workout Cards -->
           <div v-else class="space-y-4">
-            <NuxtLink v-for="workout in workoutsForDate" :key="workout.id" :to="`/dashboard/workout/${workout.id}`" class="block">
+            <NuxtLink v-for="workout in workoutsForDate" :key="workout.id" :to="`/dashboard/workout/${workout.id}?date=${dateKey}`" class="block">
             <UCard class="hover:ring-2 hover:ring-primary-500 transition cursor-pointer">
               <div class="flex items-start justify-between">
                 <div class="flex items-start gap-4">
@@ -91,10 +91,18 @@ import { format } from 'date-fns'
 definePageMeta({
   middleware: ['auth'],
 })
-import { today, getLocalTimeZone } from '@internationalized/date'
+import { today, getLocalTimeZone, CalendarDate } from '@internationalized/date'
+
+const route = useRoute()
+const queryDate = route.query.date as string | undefined
+
+function parseQueryDate(dateStr: string) {
+  const [year, month, day] = dateStr.split('-').map(Number)
+  return new CalendarDate(year, month, day)
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const selectedDate = ref<any>(today(getLocalTimeZone()))
+const selectedDate = ref<any>(queryDate ? parseQueryDate(queryDate) : today(getLocalTimeZone()))
 const isOpen = ref(false)
 
 watch(selectedDate, () => {
