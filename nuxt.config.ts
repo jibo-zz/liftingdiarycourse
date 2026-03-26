@@ -4,7 +4,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   
   // REMOVE '@nuxtjs/tailwindcss' from this array
-  modules: ['@clerk/nuxt', '@nuxt/eslint', '@nuxt/ui'], 
+  modules: ['@clerk/nuxt', '@nuxt/eslint', '@nuxt/ui'],
+
+  clerk: {
+    afterSignInUrl: '/dashboard',
+    afterSignUpUrl: '/dashboard',
+  },
 
   css: ['~/assets/css/main.css'],
   
